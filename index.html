@@ -303,6 +303,118 @@ html,body{height:100%;overflow-x:hidden;background:#0d0d0d}
 .lang-fr .fr{display:block}
 .lang-en .en.if{display:inline-flex}
 .lang-fr .fr.if{display:inline-flex}
+
+/* ─ RSVP Form ─ */
+.rsvp-form{
+  border-top:1px solid #e8e0d8;
+  padding-top:28px;
+  margin-top:4px;
+  text-align:left;
+}
+
+.rsvp-form-title{
+  font-family:'Jost',sans-serif;
+  font-size:10px;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--blue);
+  margin-bottom:20px;
+  text-align:center;
+}
+
+.form-group{
+  margin-bottom:18px;
+}
+
+.form-group > label{
+  display:block;
+  font-size:10.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--text-light);
+  margin-bottom:8px;
+}
+
+.form-group input[type="text"]{
+  width:100%;
+  padding:10px 14px;
+  border:1px solid #e0d8d0;
+  background:#fdfaf7;
+  font-family:'Jost',sans-serif;
+  font-size:13px;
+  font-weight:300;
+  color:var(--text-dark);
+  outline:none;
+  transition:border-color .25s;
+  border-radius:2px;
+}
+
+.form-group input[type="text"]:focus{
+  border-color:var(--blue-light);
+}
+
+.radio-group{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.radio-label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  font-size:13px;
+  color:var(--text-mid);
+}
+
+.radio-label input[type="radio"]{
+  accent-color:var(--blue);
+  width:15px;
+  height:15px;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.submit-btn{
+  width:100%;
+  padding:13px;
+  margin-top:8px;
+  background:var(--blue);
+  color:#fff;
+  border:none;
+  font-family:'Jost',sans-serif;
+  font-size:11px;
+  font-weight:300;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:background .3s ease;
+  border-radius:2px;
+}
+
+.submit-btn:hover{background:#5a89a7}
+
+.rsvp-success{
+  text-align:center;
+  padding:24px 0 8px;
+}
+
+.success-icon{
+  font-size:22px;
+  color:var(--gold);
+  margin-bottom:12px;
+  letter-spacing:6px;
+}
+
+.rsvp-success p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;
+  font-style:italic;
+  color:var(--text-mid);
+  line-height:1.6;
+}
+
 </style>
 </head>
 <body>
@@ -389,6 +501,67 @@ html,body{height:100%;overflow-x:hidden;background:#0d0d0d}
           <a href="tel:5142207457">514-220-7457</a>
         </div>
       </div>
+      
+    <div class="rsvp-form">
+      <div class="rsvp-form-title en">RSVP</div>
+      <div class="rsvp-form-title fr">Confirmer votre pr&eacute;sence</div>
+
+      <form id="rsvpForm" action="https://formspree.io/f/xeevkgzo" method="POST" onsubmit="handleRsvp(event)">
+
+        <div class="form-group">
+          <label class="en">Your name</label>
+          <label class="fr">Votre nom</label>
+          <input type="text" name="name" required placeholder="Andrea Dupont">
+        </div>
+
+        <div class="form-group">
+          <label class="en">Will you be attending?</label>
+          <label class="fr">Serez-vous pr&eacute;sent(e)?</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="attending" value="Yes" required>
+              <span class="en">Yes, I&rsquo;ll be there!</span>
+              <span class="fr">Oui, j&rsquo;y serai!</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="attending" value="No">
+              <span class="en">Sorry, I can&rsquo;t make it</span>
+              <span class="fr">D&eacute;sol&eacute;(e), je ne pourrai pas</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="en">Are you bringing a guest?</label>
+          <label class="fr">Amenez-vous un(e) invit&eacute;(e)?</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="plus_one" value="Yes" required>
+              <span class="en">Yes, +1</span>
+              <span class="fr">Oui, +1</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="plus_one" value="No">
+              <span class="en">No, just me</span>
+              <span class="fr">Non, juste moi</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <span class="en">Send RSVP</span>
+          <span class="fr">Envoyer</span>
+        </button>
+
+      </form>
+
+      <div id="rsvpSuccess" class="rsvp-success" style="display:none">
+        <div class="success-icon">&#10022;</div>
+        <p class="en">Thank you! We can&rsquo;t wait to celebrate with you.</p>
+        <p class="fr">Merci! Nous avons h&acirc;te de f&ecirc;ter avec vous.</p>
+      </div>
+    </div>
+
       <div class="fl">&#10022; &#10022; &#10022;</div>
     </div>
   </div>
@@ -454,6 +627,26 @@ function goBack() {
 }
 
 // Trigger subtle zoom on load
+
+function handleRsvp(e) {
+  e.preventDefault();
+  var form = document.getElementById('rsvpForm');
+  var data = new FormData(form);
+
+  fetch('https://formspree.io/f/xeevkgzo', {
+    method: 'POST',
+    body: data,
+    headers: { 'Accept': 'application/json' }
+  }).then(function(res) {
+    if (res.ok) {
+      form.style.display = 'none';
+      document.getElementById('rsvpSuccess').style.display = 'block';
+    }
+  }).catch(function() {
+    form.submit(); // fallback
+  });
+}
+
 window.addEventListener('load', function() {
   document.getElementById('landing').classList.add('loaded');
 });
