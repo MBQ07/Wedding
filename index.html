@@ -149,6 +149,10 @@ html,body{height:100%;overflow-x:hidden;background:#0d0d0d}
 
 .lang-btn{
   position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
   padding:15px 44px;
   font-family:'Jost',sans-serif;
   font-weight:200;
@@ -231,6 +235,11 @@ html,body{height:100%;overflow-x:hidden;background:#0d0d0d}
   text-shadow:none;
 }
 .modal-lang-btns .lang-btn:hover{border-color:var(--blue);background:#5a89a7}
+
+@media(max-width:480px){
+  .lang-btns{flex-direction:column;gap:12px}
+  .lang-btn{min-width:210px}
+}
 
 .landing-flourish{
   margin-top:60px;
@@ -486,6 +495,7 @@ html,body{height:100%;overflow-x:hidden;background:#0d0d0d}
     <div class="divider-line"></div>
     <div class="lang-btns">
       <button class="lang-btn" type="button" onclick="openLanguageModal()">Invitation</button>
+      <a class="lang-btn" href="video.html">Wedding Montage</a>
     </div>
     <div class="landing-flourish">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
   </div>
