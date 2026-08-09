@@ -181,6 +181,57 @@ html,body{height:100%;overflow-x:hidden;background:#0d0d0d}
 
 .lang-btn:hover::before{transform:translateX(0)}
 
+/* Language chooser modal */
+.language-modal{
+  position:fixed;
+  inset:0;
+  z-index:400;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:rgba(13,13,13,.58);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .35s ease, visibility 0s linear .35s;
+}
+.language-modal.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transition:opacity .35s ease;
+}
+.language-modal-card{
+  width:min(100%,390px);
+  padding:36px 30px 32px;
+  text-align:center;
+  background:rgba(255,249,244,.97);
+  border:1px solid rgba(255,255,255,.72);
+  box-shadow:0 18px 55px rgba(0,0,0,.34);
+  transform:translateY(14px) scale(.98);
+  transition:transform .35s ease;
+}
+.language-modal.open .language-modal-card{transform:translateY(0) scale(1)}
+.language-modal-title{
+  font-family:'Jost',sans-serif;
+  font-size:10px;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--blue);
+  margin-bottom:22px;
+}
+.modal-lang-btns{display:flex;gap:12px;justify-content:center}
+.modal-lang-btns .lang-btn{
+  min-width:132px;
+  padding:14px 18px;
+  border-color:var(--blue-light);
+  background:var(--blue);
+  color:#fff;
+  text-shadow:none;
+}
+.modal-lang-btns .lang-btn:hover{border-color:var(--blue);background:#5a89a7}
+
 .landing-flourish{
   margin-top:60px;
   font-size:11px;
@@ -433,12 +484,21 @@ html,body{height:100%;overflow-x:hidden;background:#0d0d0d}
     </div>
     <p class="landing-date">22 &middot; 08 &middot; 2026 &nbsp;&bull;&nbsp; Montr&eacute;al</p>
     <div class="divider-line"></div>
-    <p class="lang-prompt">Choose your language</p>
     <div class="lang-btns">
-      <button class="lang-btn" onclick="openInvitation('en')"><span>English</span></button>
-      <button class="lang-btn" onclick="openInvitation('fr')"><span>Fran&ccedil;ais</span></button>
+      <button class="lang-btn" type="button" onclick="openLanguageModal()">Invitation</button>
     </div>
     <div class="landing-flourish">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
+  </div>
+</div>
+
+<!-- ═══ LANGUAGE CHOOSER ═══ -->
+<div class="language-modal" id="languageModal" aria-hidden="true" onclick="closeLanguageModal()">
+  <div class="language-modal-card" role="dialog" aria-modal="true" aria-labelledby="languageModalTitle" onclick="event.stopPropagation()">
+    <p class="language-modal-title" id="languageModalTitle">Choose your language</p>
+    <div class="modal-lang-btns">
+      <button class="lang-btn" type="button" onclick="chooseLanguage('en')">English</button>
+      <button class="lang-btn" type="button" onclick="chooseLanguage('fr')">Fran&ccedil;ais</button>
+    </div>
   </div>
 </div>
 
@@ -568,6 +628,27 @@ html,body{height:100%;overflow-x:hidden;background:#0d0d0d}
 </div>
 
 <script>
+function openLanguageModal() {
+  var modal = document.getElementById('languageModal');
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+}
+
+function closeLanguageModal() {
+  var modal = document.getElementById('languageModal');
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+}
+
+function chooseLanguage(lang) {
+  closeLanguageModal();
+  openInvitation(lang);
+}
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') closeLanguageModal();
+});
+
 function openInvitation(lang) {
   var flash = document.getElementById('flash');
   var landing = document.getElementById('landing');
