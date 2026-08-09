@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedding Montage — Andrea &amp; Maxim</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#6b9ab8;--blue-light:#a8c8de;--cream:#faf8f4;--warm-white:#fff9f4;--text-dark:#2c2c2c;--text-mid:#5a5a5a;--gold:#c9a96e}
+html,body{min-height:100%;background:var(--cream);color:var(--text-dark)}
+body{font-family:'Jost',sans-serif;font-weight:300}
+.montage-page{min-height:100vh;padding:32px 20px 56px;display:flex;flex-direction:column;align-items:center;background:radial-gradient(circle at 50% 0%,#fff 0%,var(--cream) 58%,#edf4f7 140%)}
+.back{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;color:var(--text-mid);text-decoration:none;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:8px 0;transition:color .25s}
+.back::before{content:'←';font-size:15px;line-height:1}
+.back:hover{color:var(--blue)}
+.montage{width:min(100%,940px);margin:auto;text-align:center;animation:rise .8s ease both}
+.eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--blue);margin-bottom:16px}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,9vw,76px);font-weight:300;font-style:italic;line-height:.95;margin-bottom:12px}
+.subtitle{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--text-mid);margin-bottom:30px}
+.flourish{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--blue-light);font-size:13px;letter-spacing:5px;margin-bottom:26px}
+.flourish::before,.flourish::after{content:'';width:62px;height:1px;background:linear-gradient(to right,transparent,var(--blue-light))}
+.flourish::after{transform:scaleX(-1)}
+.video-frame{padding:10px;background:var(--warm-white);box-shadow:0 14px 44px rgba(83,123,146,.18),0 1px 8px rgba(0,0,0,.08)}
+video{display:block;width:100%;max-height:70vh;background:#111;outline:none}
+.qr-card{max-width:330px;margin:34px auto 0;padding:22px;background:rgba(255,249,244,.84);border:1px solid rgba(168,200,222,.7)}
+.qr-card p:first-child{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.qr-card img{display:block;width:154px;height:154px;margin:0 auto 12px;background:#fff}
+.qr-card p:last-child{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;line-height:1.45;color:var(--text-mid)}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){.montage-page{padding:22px 14px 42px}.video-frame{padding:6px}.qr-card{margin-top:26px}}
+</style>
+</head>
+<body>
+<main class="montage-page">
+  <a class="back" href="index.html">Back to invitation</a>
+  <section class="montage" aria-labelledby="montage-title">
+    <p class="eyebrow">Andrea &amp; Maxim</p>
+    <h1 id="montage-title">Wedding Montage</h1>
+    <p class="subtitle">A few moments, held close.</p>
+    <div class="flourish">✦</div>
+    <div class="video-frame">
+      <video controls playsinline preload="metadata">
+        <source src="https://pub-b0bb20ba85094138a9e31564b85ed317.r2.dev/WeddingMontage.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <aside class="qr-card" aria-label="QR code for this montage">
+      <p>Share the montage</p>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&amp;format=svg&amp;data=https%3A%2F%2Fmbq07.github.io%2FWedding%2Fvideo.html" alt="QR code linking to the Wedding Montage">
+      <p>Scan to watch this montage on any device.</p>
+    </aside>
+  </section>
+</main>
+</body>
+</html>
