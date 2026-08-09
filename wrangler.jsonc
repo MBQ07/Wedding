@@ -1,1 +1,11 @@
-{"name":"wedding-album","main":"worker.js","compatibility_date":"2026-08-09"}
+{
+  "name": "wedding-album",
+  "main": "worker.js",
+  "compatibility_date": "2026-08-09",
+  "r2_buckets": [
+    {
+      "binding": "PHOTOS",
+      "bucket_name": "wedding-photos"
+    }
+  ]
+}
