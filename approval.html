@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Approve Wedding Photos</title>
+<style>
+body{margin:0;background:#f7fbfd;color:#2c2c2c;font:16px Arial,sans-serif}.wrap{max-width:900px;margin:auto;padding:32px 16px 55px;text-align:center}h1,h2{font-family:Georgia,serif;font-weight:400}h1{font-size:42px;margin:10px 0}.rule{color:#c9a96e;margin:18px}.panel{max-width:430px;margin:24px auto;padding:22px;background:#fff;border:1px solid #dce9f0;text-align:left}label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em}input,button{width:100%;box-sizing:border-box;padding:13px;margin-top:8px;border-radius:0}input{border:1px solid #cbdde7}button{border:0;color:#fff;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;font-size:12px}.open{background:#4f86a8}.status{min-height:20px;text-align:center;color:#68737a}.error{color:#a95353}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:left}.card{background:#fff;border:1px solid #dce9f0;padding:9px}.card img{width:100%;aspect-ratio:1;display:block;object-fit:cover;background:#e8f1f5}.date{margin:9px 0;font-size:12px;color:#68737a}.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.approve{background:#4f86a8}.delete{background:#9c5b5b}.empty{grid-column:1/-1;color:#788;text-align:center;padding:35px}button:disabled{opacity:.55;cursor:wait}@media(max-width:560px){h1{font-size:36px}.grid{grid-template-columns:repeat(2,1fr);gap:10px}.actions{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="rule">✦</div>
+  <h1>Photo Approval</h1>
+  <p>Private page for approving wedding photos.</p>
+  <section id="login" class="panel">
+    <label>Wedding passcode<input id="code" type="password" inputmode="numeric" autocomplete="current-password" required></label>
+    <button id="open" class="open">Show pending photos</button>
+    <p id="status" class="status"></p>
+  </section>
+  <section id="photos" hidden>
+    <h2>Waiting for approval</h2>
+    <div id="grid" class="grid"></div>
+  </section>
+</main>
+<script>
+const API="https://wedding-album.slabyrinto.workers.dev";
+const code=document.getElementById("code"),open=document.getElementById("open"),status=document.getElementById("status"),photos=document.getElementById("photos"),grid=document.getElementById("grid");
+function headers(json=false){let h={"X-Wedding-Passcode":code.value};if(json)h["Content-Type"]="application/json";return h}
+function message(text,error=false){status.textContent=text;status.className="status"+(error?" error":"")}
+async function request(path,options={}){let r=await fetch(API+path,options),d=await r.json();if(!r.ok)throw Error(d.error||"Something went wrong.");return d}
+function card(photo){let item=document.createElement("article");item.className="card";let image=document.createElement("img");image.src=photo.url;image.alt="Pending wedding photo";let date=document.createElement("p");date.className="date";date.textContent=new Date(photo.uploaded).toLocaleString();let actions=document.createElement("div");actions.className="actions";let approve=document.createElement("button");approve.className="approve";approve.textContent="Approve";let remove=document.createElement("button");remove.className="delete";remove.textContent="Delete";async function act(path,method){approve.disabled=remove.disabled=true;try{await request(path,{method,headers:headers(true),body:JSON.stringify({key:photo.key})});item.remove();if(!grid.children.length)grid.innerHTML='<p class="empty">No photos waiting for approval.</p>'}catch(e){approve.disabled=remove.disabled=false;message(e.message,true)}}approve.onclick=()=>act("/approve","POST");remove.onclick=()=>{if(confirm("Delete this photo permanently?"))act("/pending","DELETE")};actions.append(approve,remove);item.append(image,date,actions);return item}
+async function load(){open.disabled=true;message("Loading…");try{let d=await request("/pending",{headers:headers()});grid.innerHTML="";if(d.photos.length)d.photos.forEach(p=>grid.append(card(p)));else grid.innerHTML='<p class="empty">No photos waiting for approval.</p>';photos.hidden=false;message("")}catch(e){message(e.message,true)}open.disabled=false}
+open.onclick=load;code.addEventListener("keydown",e=>{if(e.key==="Enter")load()});
+</script>
+</body>
+</html>
