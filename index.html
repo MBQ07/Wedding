@@ -495,8 +495,8 @@ html,body{height:100%;overflow-x:hidden;background:#0d0d0d}
     <div class="divider-line"></div>
     <div class="lang-btns">
       <button class="lang-btn" type="button" onclick="openLanguageModal()">Invitation</button>
-      <a class="lang-btn" href="video.html">Wedding Montage</a>
-  <a class="lang-btn" href="album.html">Wedding Album</a>
+      <button class="lang-btn" type="button" onclick="openLanguageModal('video.html')">Wedding Montage</button>
+  <button class="lang-btn" type="button" onclick="openLanguageModal('album.html')">Wedding Album</button>
     </div>
     <div class="landing-flourish">&#10022; &nbsp; &#10022; &nbsp; &#10022;</div>
   </div>
@@ -639,7 +639,10 @@ html,body{height:100%;overflow-x:hidden;background:#0d0d0d}
 </div>
 
 <script>
-function openLanguageModal() {
+var languageDestination = null;
+
+function openLanguageModal(destination) {
+  languageDestination = destination || null;
   var modal = document.getElementById('languageModal');
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
@@ -653,6 +656,12 @@ function closeLanguageModal() {
 
 function chooseLanguage(lang) {
   closeLanguageModal();
+  if (languageDestination) {
+    var destination = languageDestination;
+    languageDestination = null;
+    window.location.href = destination + '?lang=' + lang;
+    return;
+  }
   openInvitation(lang);
 }
 
